@@ -25,7 +25,7 @@ Development Workflow for Semantic Data
 
 For a typical domain, I test-drive some models to define the nature of the data.  These are custom-built to support the user scenarios and behavior an application is built to serve.  For semantic models, I'm going for something different.  The relationships between resources are much more dynamic.  It's tough to build an application on dynamic domain models.  
 
-To work with this, I optimize for different things.  Instead of trying to canonize the data, I try to concretize the interaction.  Given a head/buffer/file full of data, what's the easiest way to save it?  Which values have to be recorded?  Which values can be inferred or classified offline?  
+To work with this, I'd rather optimize for different things.  Instead of trying to canonize the data, concretize the interaction.  Given a head/buffer/file full of data, what's the easiest way to save it?  Which values have to be recorded?  Which values can be inferred or classified offline?  
 
 I think that there's going to be an evolution of the data graph.  I'm looking to start with the mundane, and hope to be able to create a broad view from the details collected.  Possibly, I will have alternative broad views, such as a full view of the topic or a chronological account of the topic as it transpires.  From here, I want to look for insightful information: inferences that show the nature of our subject.  
 
@@ -42,8 +42,6 @@ It would be good to offer a practical example.  I'll get to these in a bit.  I d
 
 TODO
 ====
-
-This is a rough list.  The RDF.rb mind map has a few more details.
 
 * bring in the association and combination code
 * implement mutability
