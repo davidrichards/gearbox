@@ -1,15 +1,31 @@
 module Gearbox
+  
+  ##
+  # The attributes to add to a model.
+  # TODO: Add example from file.
+  ##
   module SemanticAccessors
 
     # Treat this as a bundle of class methods and instance methods.
+    # @private
     def self.included(base)
       base.extend ClassMethods
       base.send :include, InstanceMethods
     end
 
-
+    ##
+    # Class methods for the model.
+    ##
     module ClassMethods
       
+      # Add an attribute or a field to a model.  Takes a field name.  
+      # Defines both a getter and a setter on the object.
+      # Requires a predicate option.  Options are:
+      # * :predicate => RDF::URI
+      # * :reverse => Boolean store as value, predicate, subject
+      # * :index => Boolean maintain a full-text search index on this attribute
+      # @param [String, Symbol] getter_name, the field that is being created.
+      # @param [Hash] options
       def attribute(getter_name, options={})
         
         raise ArgumentError, "A predicate must be defined" unless options[:predicate]
@@ -29,8 +45,10 @@ module Gearbox
 
       end
       
+      # Sets the attributes_source, where to store the attributes
       attr_writer :attributes_source
       
+      # Gets the attributes_source...
       def attributes_source
         @attributes_source ||= :attribute_collection
       end

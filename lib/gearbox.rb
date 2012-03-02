@@ -10,6 +10,7 @@ module Gearbox
   # ========================
   # = Helper Utility: path =
   # ========================
+  # @private
   def path(path)
     File.expand_path("../gearbox/#{path}", __FILE__)
   end

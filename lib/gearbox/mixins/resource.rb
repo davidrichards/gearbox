@@ -1,4 +1,8 @@
 module Gearbox
+  ##
+  # The main mixin for any model.  
+  # TODO: include an example file.
+  ##
   module Resource
 
     # ============
