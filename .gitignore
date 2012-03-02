@@ -8,6 +8,9 @@ rdoc
 doc
 .yardoc
 
+# Documents
+.html
+
 # bundler
 .bundle
 
@@ -46,3 +49,6 @@ pkg
 
 # For rubinius:
 #*.rbc
+
+# For RVM
+.rvmrc

@@ -17,8 +17,8 @@ Jeweler::Tasks.new do |gem|
   gem.name = "gearbox"
   gem.homepage = "http://github.com/davidrichards/gearbox"
   gem.license = "MIT"
-  gem.summary = %Q{TODO: one-line summary of your gem}
-  gem.description = %Q{TODO: longer description of your gem}
+  gem.summary = %Q{Flexible semantic models.}
+  gem.description = %Q{A SPARQL-driven modeling toolset for semantic models.}
   gem.email = "davidlamontrichards@gmail.com"
   gem.authors = ["David Richards"]
   # dependencies defined in Gemfile
