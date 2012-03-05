@@ -1,7 +1,9 @@
 source 'http://rubygems.org'
 
 gem 'linkeddata'
-gem 'rspec'
+gem 'sparql'
+gem "equivalent-xml"
+# gem 'rspec'
 gem 'uuid'
 
 if RUBY_PLATFORM =~ /darwin/i

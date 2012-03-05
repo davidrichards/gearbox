@@ -1,6 +1,6 @@
 require_relative '../spec_helper'
 
-include Gearbox
+include Example
 
 describe Audience do
   

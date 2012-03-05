@@ -1,4 +1,4 @@
-module Gearbox
+module Example
   class Theme
 
     attr_accessor :name

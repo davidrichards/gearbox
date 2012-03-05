@@ -29,8 +29,10 @@ module Gearbox
       def attribute(getter_name, options={})
         
         raise ArgumentError, "A predicate must be defined" unless options[:predicate]
+
+        defaults = {:type => Gearbox::Types::Any}
         
-        send(attributes_source)[getter_name] = options
+        send(attributes_source)[getter_name] = defaults.merge(options)
 
         # Define a getter on the object
         define_method(getter_name) do
@@ -59,8 +61,9 @@ module Gearbox
       
       def yield_attr(getter_name, instance)
         if statement = instance.rdf_collection[getter_name]
-          # TODO: Deserialize object
-          return statement.object.to_s
+          attribute_options = instance.class.attribute_collection[getter_name]
+          type = attribute_options ? attribute_options.type : nil
+          type ? type.unserialize(statement.object) : statement.object.to_s
         else
           attribute_options = send(attributes_source)[getter_name]
           attribute_options ? attribute_options.default : nil
@@ -69,7 +72,8 @@ module Gearbox
       
       def store_attr(getter_name, instance, value)
         attribute_options = send(attributes_source)[getter_name]
-        # TODO: serialize value
+        type = attribute_options.type
+        value = type.serialize(value)  if type.respond_to?(:serialize)
         statement = RDF::Statement.new(instance.subject, attribute_options.predicate, value)
         instance.rdf_collection[getter_name] = statement
       end
@@ -84,7 +88,8 @@ module Gearbox
       end
       
       def subject
-        "1"
+        # Will be updated...
+        @subject ||= RDF::Node.new
       end
       
       # An initialization strategy for all occasions.

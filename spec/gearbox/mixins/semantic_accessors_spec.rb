@@ -48,6 +48,18 @@ describe SemanticAccessors do
     subject.given_name.must_equal "Frank"
   end
   
-  it "takes an Array of RDF::Statement objects on initialization"
+  it "defaults the type to Gearbox::Types::Any" do
+    @class.attribute :given_name, :predicate => RDF::FOAF.givenname
+    @class.attribute_collection[:given_name].type.must_equal Gearbox::Types::Any
+  end
+  
+  it "stores the literals with their type" do
+    @class.attribute :file_release, :predicate => RDF::DOAP["file-release"], :type => Types::Date
+    subject = @class.new(:file_release => Time.now)
+    release = subject.rdf_collection.query("select ?release where {?s <#{RDF::DOAP["file-release"]}> ?release}")[0].release
+    release.must_be_kind_of RDF::Literal::Date
+    release.object.must_be_kind_of Date
+    release.object.day.must_equal Time.now.day
+  end
 
 end

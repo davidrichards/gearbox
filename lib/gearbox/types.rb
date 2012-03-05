@@ -14,14 +14,15 @@ module Gearbox
     # No autoloading here--the associations to XSD types are made by the
     # classes themselves, so we need to explicitly require them or XSD types
     # will show up as not found.
-    require 'gearbox/types/integer'
-    require 'gearbox/types/boolean'
-    require 'gearbox/types/any'
-    require 'gearbox/types/string'
-    require 'gearbox/types/float'
-    require 'gearbox/types/uri'
-    require 'gearbox/types/decimal'
-    require 'gearbox/types/native'
+    require_relative 'types/integer'
+    require_relative 'types/boolean'
+    require_relative 'types/any'
+    require_relative 'types/string'
+    require_relative 'types/float'
+    require_relative 'types/uri'
+    require_relative 'types/decimal'
+    require_relative 'types/native'
+    require_relative 'types/date'
 
 
   end

@@ -9,7 +9,7 @@ module Gearbox
     # ============
     # = Behavior =
     # ============
-    include RDF::Enumerable
+    include RDF::Queryable
     
     def initialize
       @source = {}
@@ -21,18 +21,23 @@ module Gearbox
     # @param [Block] block Optional block.  Creates an external iterator if omitted.
     # @return [nil, Enumerator] Returns either nil, or an external iterator.
     def each(&block)
-      if block_given?
-        @source.each(&block)
-      else
-        Enumerator.new(self, :each)
-      end
+      local_repository.each(&block)
     end
+    
+    def each_with_field_names(&block)
+      @source.each(&block)
+    end
+    
+    attr_accessor :source
     
     # Set RDF::Statements to the underlying collection.  Normalizes the keys.
     # @param [String, Symbol] key
     # @param [RDF::Statement] obj.  RDF::Statement that will be added.
     def add_statement(key, obj)
-      @source[normalize_key(key)] = obj if obj.is_a?(RDF::Statement)
+      if obj.is_a?(RDF::Statement)
+        @source[normalize_key(key)] = obj 
+        local_repository << obj
+      end
     end
     alias :[]= :add_statement
     
@@ -57,7 +62,16 @@ module Gearbox
     # @param [Hash] hash.  Collection of statements.
     # @return [nil]
     def merge!(hash)
-      hash.each {|key, obj| add_statement(key, obj)}
+      hash.each_with_field_names {|key, obj| add_statement(key, obj)}
+    end
+    
+    attr_writer :local_repository
+    def local_repository
+      @local_repository ||= RDF::Repository.new
+    end
+    
+    def query(string)
+      SPARQL.execute(string, local_repository)
     end
     
     private

@@ -9,5 +9,9 @@ describe Gearbox do
   it "depends on uuid" do
     defined?(UUID).must_equal('constant')
   end
+  
+  it "depends on sparql" do
+    defined?(SPARQL).must_equal('constant')
+  end
 end
 

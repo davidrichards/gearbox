@@ -1,12 +1,16 @@
-module Gearbox
+module Example
   class Person
     
-    attr_accessor :name
-    attr_accessor :twitter_account
-    attr_accessor :email
-    attr_accessor :website
-    attr_accessor :phone
+    include Gearbox::Resource
+    
+    attribute :name, :predicate => RDF::FOAF.givenname
+    attribute :twitter_account, :predicate => RDF::FOAF.accountName
+    attribute :email, :predicate => RDF::FOAF.mbox
+    attribute :website, :predicate => RDF::FOAF.weblog
+    attribute :phone, :predicate => RDF::FOAF.phone
+    
     attr_accessor :resource
+    # association :resource, :class => Resource
     
   end
 end

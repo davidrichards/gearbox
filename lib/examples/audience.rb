@@ -1,4 +1,4 @@
-module Gearbox
+module Example
   class Audience
     
     attr_writer :resource_source

@@ -1,11 +1,15 @@
 require_relative '../spec_helper'
 
-include Gearbox
+include Example
 
 describe Person do
   
   subject { Person.new() }
 
+  it "uses Gearbox::Resource" do
+    Person.included_modules.must_include(Gearbox::Resource)
+  end
+  
   it "has a name getter and setter" do
     name = "George Q. Cannon"
     subject.name = name

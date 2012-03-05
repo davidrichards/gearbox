@@ -6,8 +6,8 @@ describe RDFCollection do
   
   subject { RDFCollection.new() }
 
-  it "uses RDF::Enumerable " do
-    RDFCollection.included_modules.must_include RDF::Enumerable
+  it "uses RDF::Queryable " do
+    RDFCollection.included_modules.must_include RDF::Queryable
   end
   
   it "adds statements with add_statement or []=" do
@@ -48,5 +48,31 @@ describe RDFCollection do
     subject[key] = RDF::Statement(:a, :b, :c)
     subject.has_key?(key, :normalize => false).must_equal false
     subject.has_key?(normalized_key, :normalize => false).must_equal true
+  end
+  
+  it "has a local_repository" do
+    subject.local_repository.must_be_kind_of RDF::Repository
+  end
+  
+  it "has a local_repository setter" do
+    subject.local_repository = :blah
+    subject.local_repository.must_equal :blah
+  end
+  
+  it "delegates to the local_repository from each" do
+    subject.local_repository = [1,2,3]
+    subject.to_a.must_equal [1,2,3]
+  end
+  
+  it "uses each_with_field_names to iterate the labeled statements" do
+    statement = RDF::Statement(:a, :b, :c)
+    subject.add_statement :x, statement
+    subject.each_with_field_names.to_a.must_equal [[:x, statement]]
+  end
+  
+  it "has a query method for SPARQL.execute" do
+    statement = RDF::Statement(RDF::Node.new, RDF::FOAF.givenname, "Frank")
+    subject.add_statement :x, statement
+    subject.query("select ?object where {?s ?p ?object}")[0].object.value.must_equal "Frank"
   end
 end
