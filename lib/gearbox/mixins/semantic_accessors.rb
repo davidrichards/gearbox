@@ -39,11 +39,6 @@ module Gearbox
         assert_options(opts)
       end
       
-      def id
-        @id ||= object_id
-      end
-      attr_writer :id
-      
       def attributes
         self.class.attributes.inject({:id => id}) do |hash, (name, opts)|
           hash[name] = send(name)

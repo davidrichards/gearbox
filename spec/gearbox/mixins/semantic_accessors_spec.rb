@@ -46,15 +46,6 @@ describe SemanticAccessors do
 
     subject { @class.new }
     
-    it "defaults the id to object_id" do
-      subject.id.must_equal subject.object_id
-    end
-    
-    it "has an id setter" do
-      subject.id = :whale
-      subject.id.must_equal :whale
-    end
-    
     it "creates a setter and a getter for each attribute" do
       subject.name = "George"
       subject.name.must_equal "George"
@@ -69,6 +60,7 @@ describe SemanticAccessors do
     
     it "creates an attributes hash from attribute values" do
       subject.name = "George"
+      def subject.id; 1; end
       subject.attributes.must_equal({:id => subject.id, :name => "George"})
     end
     
