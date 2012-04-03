@@ -21,6 +21,7 @@ Jeweler::Tasks.new do |gem|
   gem.description = %Q{A SPARQL-driven modeling toolset for semantic models.}
   gem.email = "davidlamontrichards@gmail.com"
   gem.authors = ["David Richards"]
+  gem.executables = %w(gearbox)
   # dependencies defined in Gemfile
 end
 Jeweler::RubygemsDotOrgTasks.new
