@@ -9,7 +9,11 @@ module Gearbox
     # = Behavior =
     # ============
     def self.included(base)
-      base.send :include, AdHocProperties
+      # Rethinking this one, they will be much more robust soon.
+      # This is more for knowledge base discovery or throw-away models
+      # So there's a new approach on the horizon of my imagination.
+      # base.send :include, AdHocProperties
+      base.send :include, SubjectMethods
       base.send :include, SemanticAccessors
       base.send :include, RDF::Mutable
       base.send :include, RDF::Queryable
