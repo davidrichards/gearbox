@@ -1,11 +1,11 @@
 source 'http://rubygems.org'
 
 gem 'linkeddata'
-gem 'sparql'
-gem "equivalent-xml"
-# gem 'rspec'
-gem 'uuid'
+# gem 'sparql'
+# gem "equivalent-xml"
+# gem 'uuid'
 gem 'activemodel'
+gem "pry"
 
 if RUBY_PLATFORM =~ /darwin/i
   gem 'autotest-fsevent'
@@ -21,5 +21,4 @@ group :development do
   gem 'guard-markdown'
   gem "ruby-debug19"
   gem 'guard-minitest', :git => 'git://github.com/aspiers/guard-minitest.git'
-  gem "pry"
 end

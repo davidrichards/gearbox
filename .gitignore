@@ -52,3 +52,6 @@ pkg
 
 # For RVM
 .rvmrc
+
+# For Bundler
+Gemfile.lock
