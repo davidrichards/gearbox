@@ -2,6 +2,7 @@ source 'http://rubygems.org'
 
 gem 'linkeddata'
 gem 'sparql'
+gem 'equivalent-xml'
 gem 'activemodel'
 gem "pry"
 
