@@ -1,7 +1,6 @@
 # ================
 # = Dependencies =
 # ================
-require 'uuid'
 require 'linkeddata'
 require 'ostruct'
 require 'active_model'
