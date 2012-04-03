@@ -206,7 +206,7 @@ describe Attribute do
       # Note, I'm skipping token because the underlying RDF doesn't seem to work, and I don't
       # have a use case for it.
       # Also, I'm skipping XML because I don't have a use case for XML yet.
-    end
+    end # "as prompted by Attribute instance changes"
     
     describe "as prompted by parameter changes" do
       it "defaults the literal to no data type at all" do
@@ -270,9 +270,9 @@ describe Attribute do
         literal.object.must_equal value
         literal.value.must_equal value.strftime("%H:%M:%S%Z")
       end
-    end
+    end # "as prompted by parameter changes"
     
-  end
+  end # literal
   
   describe "to_rdf" do
     
@@ -348,12 +348,47 @@ describe Attribute do
         rdf.subject.to_s.must_equal "http://example.com/special_subject"
         rdf.subject.must_be_kind_of RDF::URI
       end
-    end
+    end # "as prompted from the Attribute instance"
     
     describe "as prompted from the call parameters" do
-    end
+      
+      it "can take a predicate parameter" do
+        rdf = subject.to_rdf(model, :predicate => RDF::FOAF.mbox)
+        rdf.predicate.must_equal RDF::FOAF.mbox
+      end
+      
+      it "can take a value parameter" do
+        rdf = subject.to_rdf(model, :value => "George")
+        object = rdf.object
+        object.to_s.must_equal "George"
+        object.must_be_kind_of RDF::Literal
+      end
+      
+      it "can take a language parameter" do
+        rdf = subject.to_rdf(model, :value => "Jorge", :language => :es)
+        rdf.object.language.must_equal :es
+      end
+      
+      it "can take a reverse parameter" do
+        rdf = subject.to_rdf(model, :value => "George", :reverse => true)
+        rdf.subject.to_s.must_equal "George"
+        rdf.subject.must_be_kind_of RDF::Literal
+        rdf.predicate.must_equal RDF::FOAF.name
+        rdf.object.to_s.must_equal model.subject
+        rdf.object.must_be_kind_of RDF::URI
+      end
+      
+      it "cannot take a subject_decorator as a parameter" do
+        def subject.special_subject
+          "http://example.com/special_subject"
+        end
+        rdf = subject.to_rdf(model, :subject_decorator => :special_subject)
+        rdf.subject.to_s.must_equal model.subject
+      end
+      
+    end # "as prompted from the call parameters"
     
-  end
+  end # to_rdf
   
 
 end
