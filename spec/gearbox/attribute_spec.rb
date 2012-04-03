@@ -322,6 +322,32 @@ describe Attribute do
         rdf.object.to_s.must_equal model.subject
         rdf.object.must_be_kind_of RDF::URI
       end
+      
+      it "uses a subject_decorator for overriding the model subject" do
+        subject.subject_decorator = :special_subject
+        def subject.special_subject
+          "http://example.com/special_subject"
+        end
+        rdf = subject.to_rdf(model)
+        rdf.subject.to_s.must_equal "http://example.com/special_subject"
+        rdf.subject.must_be_kind_of RDF::URI
+      end
+      
+      it "uses a subject_decorator as a lambda" do
+        subject.subject_decorator = lambda{"http://example.com/special_subject"}
+        rdf = subject.to_rdf(model)
+        rdf.subject.to_s.must_equal "http://example.com/special_subject"
+        rdf.subject.must_be_kind_of RDF::URI
+      end
+      
+      it "uses the local subject before using the model subject, if defined" do
+        def subject.subject
+          "http://example.com/special_subject"
+        end
+        rdf = subject.to_rdf(model)
+        rdf.subject.to_s.must_equal "http://example.com/special_subject"
+        rdf.subject.must_be_kind_of RDF::URI
+      end
     end
     
     describe "as prompted from the call parameters" do

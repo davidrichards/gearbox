@@ -76,7 +76,9 @@ module Gearbox
         :value => self.literal(opts)
       }.merge(opts)
       
-      subject = RDF::URI.new(model.subject)
+      subject = self.subject
+      subject ||= model.subject
+      subject = RDF::URI.new(subject)
       predicate = opts[:predicate]
       object = opts[:value]
       
