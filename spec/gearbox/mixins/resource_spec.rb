@@ -45,6 +45,7 @@ describe Resource do
       subject = @class.new(:name => "George")
       subject.to_a.must_equal([RDF::Statement.new(subject.subject, RDF::FOAF.name, RDF::Literal.new("George"))])
     end
+    
   end
   
   describe "Load order" do
