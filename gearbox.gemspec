@@ -5,7 +5,7 @@
 
 Gem::Specification.new do |s|
   s.name = "gearbox"
-  s.version = "0.1.7"
+  s.version = "0.1.10"
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["David Richards"]
@@ -28,6 +28,7 @@ Gem::Specification.new do |s|
     "Rakefile",
     "VERSION",
     "bin/gearbox",
+    "gearbox.gemspec",
     "lib/gearbox.rb",
     "lib/gearbox/attribute.rb",
     "lib/gearbox/attribute_collection.rb",
