@@ -390,5 +390,66 @@ describe Attribute do
     
   end # to_rdf
   
+  describe "building from an RDF Statement" do
+    describe "when taking a straight RDF::Statement" do
+      it "sets the predicate and object" do
+        statement = RDF::Statement(:any_subject, RDF::FOAF.name, "George")
+        subject = Attribute.new(:statement => statement)
+        subject.predicate.must_equal RDF::FOAF.name
+        subject.get.must_equal "George"
+      end
+      
+      it "captures the language from the object literal" do
+        statement = RDF::Statement(:any_subject, RDF::FOAF.name, RDF::Literal.new("Jorge", :language => :es))
+        subject = Attribute.new(:statement => statement)
+        subject.language.must_equal :es
+      end
+      
+      it "captures the datatype from the object literal and serializes correctly" do
+        statement = RDF::Statement(:any_subject, RDF::FOAF.name, RDF::Literal.new("1", :datatype => RDF::XSD.integer))
+        subject = Attribute.new(:statement => statement)
+        subject.datatype.must_equal RDF::XSD.integer
+        subject.get.must_equal 1
+      end
+      
+    end # "when taking a straight RDF::Statement"
+    
+    describe "when taking an RDF::Statement with a model parameter" do
+      
+      let(:model) do
+        Class.new do
+          def subject
+            "http://example.com/demo/1"
+          end
+        end.new
+      end
+      
+      it "should set reverse when a model is set, and the object equals the model subject" do
+        statement = RDF::Statement.new("George", RDF::FOAF.name, "http://example.com/demo/1")
+        subject = Attribute.new(:statement => statement, :model => model)
+        subject.reverse.must_equal true
+        subject.get.must_equal "George"
+        subject.predicate.must_equal RDF::FOAF.name
+      end
+      
+      it "should proceed as normal if the model subject isn't reversed" do
+        object = RDF::Literal.new("1", :datatype => RDF::XSD.integer)
+        statement = RDF::Statement(:any_subject, RDF::FOAF.name, object)
+        subject = Attribute.new(:statement => statement, :model => model)
+        subject.predicate.must_equal RDF::FOAF.name
+        subject.get.must_equal 1
+        subject.datatype.must_equal RDF::XSD.integer
 
+        object = RDF::Literal.new("Jorge", :language => :es)
+        statement = RDF::Statement(:any_subject, RDF::FOAF.name, object)
+        subject = Attribute.new(:statement => statement, :model => model)
+        subject.predicate.must_equal RDF::FOAF.name
+        subject.get.must_equal "Jorge"
+        subject.language.must_equal :es
+      end
+      
+    end # "when taking an RDF::Statement with a model parameter"
+    
+  end
+  
 end

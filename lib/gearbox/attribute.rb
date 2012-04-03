@@ -9,6 +9,7 @@ module Gearbox
     def initialize(opts={})
       set(opts.delete(:value) || :_value_not_set)
       assert_defaults
+      extract_from_statement(opts) if opts.has_key?(:statement)
       assert_options(opts)
     end
     
@@ -97,6 +98,29 @@ module Gearbox
         opts.each do |accessor, value|
           send("#{accessor}=", value) if respond_to?("#{accessor}=")
         end
+      end
+      
+      def extract_from_statement(opts)
+        statement = opts[:statement]
+        object = statement.object
+
+        self.reverse = can_infer_reverse_from_model?(opts[:model], object)
+        object = statement.subject if self.reverse
+
+        self.predicate = statement.predicate
+        self.set extract_from_literal(object)
+      end
+      
+      def extract_from_literal(literal)
+        return literal unless literal.is_a?(RDF::Literal)
+        self.language = literal.language
+        self.datatype = literal.datatype
+        literal.object 
+      end
+      
+      def can_infer_reverse_from_model?(model, object)
+        return false unless model
+        model.subject.to_s == object.to_s
       end
   end
   
