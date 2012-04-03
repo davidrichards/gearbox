@@ -29,5 +29,9 @@ module Gearbox
       attribute_definitions.map{|name, attribute| attribute.to_rdf(self, opts)}.each(&block)
     end
     
+    def inspect
+      "#{self.class.name} #{self.attributes.inspect}"
+    end
+    
   end
 end
