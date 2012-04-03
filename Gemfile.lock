@@ -8,6 +8,12 @@ GIT
 GEM
   remote: http://rubygems.org/
   specs:
+    activemodel (3.2.2)
+      activesupport (= 3.2.2)
+      builder (~> 3.0.0)
+    activesupport (3.2.2)
+      i18n (~> 0.6)
+      multi_json (~> 1.0)
     addressable (2.2.7)
     archive-tar-minitar (0.5.2)
     autotest-fsevent (0.2.8)
@@ -15,6 +21,7 @@ GEM
     autotest-growl (0.2.16)
     backports (2.3.0)
     builder (3.0.0)
+    coderay (1.0.5)
     columnize (0.3.6)
     equivalent-xml (0.2.9)
       nokogiri (>= 1.4.3)
@@ -28,6 +35,7 @@ GEM
       kramdown (~> 0.13.3)
     haml (3.1.4)
     htmlentities (4.3.1)
+    i18n (0.6.0)
     jeweler (1.6.4)
       bundler (~> 1.0)
       git (>= 1.2.5)
@@ -54,10 +62,15 @@ GEM
       rdf-turtle (>= 0.1.1)
     macaddr (1.5.0)
       systemu (>= 2.4.0)
+    method_source (0.7.1)
     minitest (2.11.3)
     multi_json (1.1.0)
     net-http-persistent (1.4.1)
     nokogiri (1.5.0)
+    pry (0.9.8.4)
+      coderay (~> 1.0.5)
+      method_source (~> 0.7.1)
+      slop (>= 2.4.4, < 3)
     rake (0.9.2.2)
     rdf (0.3.5)
       addressable (>= 2.2.6)
@@ -106,6 +119,7 @@ GEM
       multi_json (~> 1.0)
       simplecov-html (~> 0.5.3)
     simplecov-html (0.5.3)
+    slop (2.4.4)
     sparql (0.1.0)
       builder (>= 3.0.0)
       json (>= 1.5.1)
@@ -131,6 +145,7 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
+  activemodel
   autotest-fsevent
   autotest-growl
   bundler
@@ -140,6 +155,7 @@ DEPENDENCIES
   jeweler (~> 1.6.4)
   linkeddata
   minitest
+  pry
   ruby-debug19
   simplecov
   sparql

@@ -5,6 +5,7 @@ gem 'sparql'
 gem "equivalent-xml"
 # gem 'rspec'
 gem 'uuid'
+gem 'activemodel'
 
 if RUBY_PLATFORM =~ /darwin/i
   gem 'autotest-fsevent'
@@ -20,4 +21,5 @@ group :development do
   gem 'guard-markdown'
   gem "ruby-debug19"
   gem 'guard-minitest', :git => 'git://github.com/aspiers/guard-minitest.git'
+  gem "pry"
 end

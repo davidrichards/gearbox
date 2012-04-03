@@ -13,5 +13,9 @@ describe Gearbox do
   it "depends on sparql" do
     defined?(SPARQL).must_equal('constant')
   end
+  
+  it "depends on ActiveModel" do
+    defined?(ActiveModel).must_equal('constant')
+  end
 end
 

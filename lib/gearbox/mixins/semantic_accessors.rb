@@ -102,6 +102,10 @@ module Gearbox
         end
       end
       
+      def attributes
+        # Hash-like object ([] and []=)
+      end
+      
       private
       
         def merge_hash_values(hash)

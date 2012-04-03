@@ -4,6 +4,7 @@
 require 'uuid'
 require 'linkeddata'
 require 'ostruct'
+require 'active_model'
 
 module Gearbox
   
@@ -122,12 +123,15 @@ module Gearbox
   # =======================
   require path('type')
   require path('types')
+  autoload :Attribute, path('attribute')
   autoload :AttributeCollection, path('attribute_collection')
   autoload :RDFCollection, path('rdf_collection')
 
   autoload :AdHocProperties, path('mixins/ad_hoc_properties')
+  autoload :AttributeMethods, path('mixins/attribute_methods')
   autoload :Resource, path('mixins/resource')
   autoload :SemanticAccessors, path('mixins/semantic_accessors')
+  autoload :SubjectMethods, path('mixins/subject_methods')
   
 end
 

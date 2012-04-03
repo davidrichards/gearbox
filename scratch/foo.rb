@@ -13,3 +13,5 @@ end
 def e(string)
   SPARQL.execute(string, r)
 end
+
+include Example
