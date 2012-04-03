@@ -127,6 +127,7 @@ module Gearbox
   autoload :RDFCollection, path('rdf_collection')
 
   autoload :AdHocProperties, path('mixins/ad_hoc_properties')
+  autoload :ActiveModelImplementation, path('mixins/active_model_implementation')
   autoload :AttributeMethods, path('mixins/attribute_methods')
   autoload :Resource, path('mixins/resource')
   autoload :SemanticAccessors, path('mixins/semantic_accessors')

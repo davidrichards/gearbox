@@ -27,6 +27,10 @@ describe Resource do
     @class.included_modules.must_include Gearbox::SubjectMethods
   end
   
+  it "uses ActiveModelImplementation" do
+    @class.included_modules.must_include Gearbox::ActiveModelImplementation
+  end
+  
   it "uses RDF::Mutable" do
     @class.included_modules.must_include RDF::Mutable
   end

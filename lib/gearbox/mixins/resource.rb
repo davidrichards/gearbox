@@ -15,13 +15,9 @@ module Gearbox
       # base.send :include, AdHocProperties
       base.send :include, SubjectMethods
       base.send :include, SemanticAccessors
+      base.send :include, ActiveModelImplementation
       base.send :include, RDF::Mutable
       base.send :include, RDF::Queryable
-    end
-    
-    # Temporary!!
-    def subject
-      "http://example.com/z/#{id}"
     end
     
     # Depends on RDF::Queryable, SemanticAccessors and SubjectMethods
