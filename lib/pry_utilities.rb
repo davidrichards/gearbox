@@ -58,6 +58,7 @@ class Utilities
   
   def list_models
     Dir.glob("#{model_directory}/*.rb").map { |file| File.basename(file).split('.')[0..-2].join('.').to_sym}
+    true
   end
   
   def tmp_directory
