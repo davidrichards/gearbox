@@ -18,6 +18,13 @@ class Utilities
   alias :update_model :write_model
   alias :build_model :write_model
   
+  def edit_models
+    raise "Directory does not exist" unless File.exist?(model_directory)
+    raise "ENV['EDITOR'] not set" unless ENV['EDITOR']
+    `#{ENV['EDITOR']} #{model_directory}`
+    Dir.glob("#{model_directory}/*.rb").map { |filename| load filename}
+  end
+  
   def load_model(name)
     raise "Directory does not exist" unless File.exist?(model_directory)
     filename = File.join(model_directory, "#{name}.rb")
@@ -45,7 +52,7 @@ class Utilities
   attr_writer :model_directory
   
   def list_models
-    Dir.glob("#{user_model_directory}/*.rb").map { |file| File.basename(file).split('.')[0..-2].join('.')}
+    Dir.glob("#{model_directory}/*.rb").map { |file| File.basename(file).split('.')[0..-2].join('.').to_sym}
   end
   
   def tmp_directory
@@ -88,5 +95,6 @@ def_delegators :@utilities,
   :tmp_directory=,
   :get_note,
   :load_model,
-  :list_models
+  :list_models,
+  :edit_models
   
