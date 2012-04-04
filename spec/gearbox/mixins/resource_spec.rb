@@ -35,23 +35,6 @@ describe Resource do
     @class.included_modules.must_include RDF::Mutable
   end
   
-  it "uses RDF::Queryable" do
-    @class.included_modules.must_include RDF::Queryable
-  end
-  
-  describe "Enumerable integration" do
-    it "has each defined on the model" do
-      subject.respond_to?(:each).must_equal true
-    end
-    
-    it "produces RDF statements from the enumeration" do
-      @class.attribute :name, :predicate => RDF::FOAF.name
-      subject = @class.new(:name => "George")
-      subject.to_a.must_equal([RDF::Statement.new(subject.subject, RDF::FOAF.name, RDF::Literal.new("George"))])
-    end
-    
-  end
-  
   describe "Load order" do
     # Unfortunately, the load order is important here.
     # There is only one example right now: id.

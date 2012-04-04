@@ -10,6 +10,7 @@ rescue Bundler::BundlerError => e
   exit e.status_code
 end
 require 'minitest/spec'
+require 'minitest/mock'
 require 'minitest/autorun'
 
 $LOAD_PATH.unshift(File.dirname(__FILE__))

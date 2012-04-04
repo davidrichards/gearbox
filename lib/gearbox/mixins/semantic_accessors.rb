@@ -23,11 +23,15 @@ module Gearbox
         end
         
         define_method("#{name}=") do |value|
+          @previously_changed = changes
           attribute_definitions[name] ||= Attribute.new(opts)
-          attribute_definitions[name].set(value)
+          old_value = attribute_definitions[name].get
+          new_value = attribute_definitions[name].set(value)
+          name_will_change! unless new_value == old_value
         end
 
         attributes[name] = opts
+        define_attribute_method(name)
       end
     end
     
@@ -37,6 +41,7 @@ module Gearbox
         super
         assert_defaults
         assert_options(opts)
+        @changed_attributes.clear if @changed_attributes
       end
       
       def attributes

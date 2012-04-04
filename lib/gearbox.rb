@@ -129,6 +129,7 @@ module Gearbox
   autoload :AdHocProperties, path('mixins/ad_hoc_properties')
   autoload :ActiveModelImplementation, path('mixins/active_model_implementation')
   autoload :AttributeMethods, path('mixins/attribute_methods')
+  autoload :QueryableImplementation, path('mixins/queryable_implementation')
   autoload :Resource, path('mixins/resource')
   autoload :SemanticAccessors, path('mixins/semantic_accessors')
   autoload :SubjectMethods, path('mixins/subject_methods')

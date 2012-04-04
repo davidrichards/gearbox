@@ -16,6 +16,7 @@ module Gearbox
       base.send :include, ActiveModel::Serializers::Xml
       
       base.send :extend, ActiveModel::Naming
+      base.send :include, ActiveModel::Dirty
     end
     
     # TODO Temporary!!! Remove after finishing the Mutable changes.

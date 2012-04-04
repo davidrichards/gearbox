@@ -24,7 +24,9 @@ class Utilities
   end
 
   def model_directory
-    @model_directory ||= "/tmp"
+    @model_directory ||= File.expand_path("~/.gearbox") if File.exist?(File.expand_path("~/.gearbox"))
+    @model_directory ||= File.expand_path("/tmp") if File.exist?("/tmp")
+    @model_directory
   end
   attr_writer :model_directory
   

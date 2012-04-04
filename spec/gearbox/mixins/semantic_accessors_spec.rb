@@ -10,6 +10,7 @@ describe SemanticAccessors do
       @class = Class.new do
         def self.name; 'demo_class'; end
         include SemanticAccessors
+        include ActiveModelImplementation
       end
     end
 
@@ -33,6 +34,18 @@ describe SemanticAccessors do
         @class.attribute(:name, :predicate => RDF::FOAF.name)
         @class.attributes[:name].must_equal({:name => :name, :predicate => RDF::FOAF.name})
       end
+      
+      it "uses define_attribute_method to tell ActiveModel about the attribute" do
+        def @class.define_attribute_method(name)
+          @attribute_methods_defined ||= []
+          @attribute_methods_defined << name
+        end
+        def @class.attribute_methods_defined
+          @attribute_methods_defined
+        end
+        @class.attribute(:name, :predicate => RDF::FOAF.name)
+        @class.attribute_methods_defined.must_equal([:name])
+      end
     end
   end # "Class methods"
   
@@ -40,6 +53,7 @@ describe SemanticAccessors do
     before do
       @class = Class.new do
         include SemanticAccessors
+        include ActiveModelImplementation
         attribute :name, :predicate => RDF::FOAF.name
       end
     end
@@ -49,6 +63,16 @@ describe SemanticAccessors do
     it "creates a setter and a getter for each attribute" do
       subject.name = "George"
       subject.name.must_equal "George"
+    end
+    
+    it "marks the attribute as dirty when changed" do
+      subject.name = "George"
+      subject.changed_attributes.must_equal({"name" => "George"})
+    end
+    
+    it "does not mark the attributes as dirty after initialization" do
+      subject = @class.new(:name => "George")
+      subject.changed?.must_equal false
     end
     
     it "supports the attribute data types" do
