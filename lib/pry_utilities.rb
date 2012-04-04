@@ -1,6 +1,7 @@
 # Useful for a Pry session.
 
 require 'forwardable'
+require 'fileutils'
 
 include Gearbox
 
@@ -23,12 +24,29 @@ class Utilities
     load filename
   end
 
+  def user_directory
+    File.expand_path("~/.gearbox")
+  end
+  
+  def user_model_directory
+    @user_model_directory ||= File.join(user_directory, "models")
+  end
+  
   def model_directory
-    @model_directory ||= File.expand_path("~/.gearbox") if File.exist?(File.expand_path("~/.gearbox"))
-    @model_directory ||= File.expand_path("/tmp") if File.exist?("/tmp")
+    return @model_directory if @model_directory
+    if File.exists?(user_directory)
+      FileUtils.mkdir(user_model_directory) unless File.exists?(user_model_directory)
+      @model_directory = user_model_directory
+    elsif File.exists?("/tmp")
+      @model_directory = File.expand_path("/tmp") if File.exists?("/tmp")
+    end
     @model_directory
   end
   attr_writer :model_directory
+  
+  def list_models
+    Dir.glob("#{user_model_directory}/*.rb").map { |file| File.basename(file).split('.')[0..-2].join('.')}
+  end
   
   def tmp_directory
     @tmp_directory ||= "/tmp"
@@ -69,5 +87,6 @@ def_delegators :@utilities,
   :tmp_directory,
   :tmp_directory=,
   :get_note,
-  :load_model
+  :load_model,
+  :list_models
   
