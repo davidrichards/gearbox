@@ -22,13 +22,18 @@ class Utilities
     raise "Directory does not exist" unless File.exist?(model_directory)
     raise "ENV['EDITOR'] not set" unless ENV['EDITOR']
     `#{ENV['EDITOR']} #{model_directory}`
-    Dir.glob("#{model_directory}/*.rb").map { |filename| load filename}
+    puts "The models are open in your editor, but you will need to load them again after completing your work."
+    true
   end
   
   def load_model(name)
     raise "Directory does not exist" unless File.exist?(model_directory)
     filename = File.join(model_directory, "#{name}.rb")
     load filename
+  end
+  
+  def load_models
+    Dir.glob("#{model_directory}/*.rb").map { |filename| load filename}
   end
 
   def user_directory
@@ -86,15 +91,16 @@ end
 @utilities = Utilities.new
 extend Forwardable
 def_delegators :@utilities, 
-  :write_model, 
-  :update_model,
   :build_model, 
+  :edit_models,
+  :get_note,
+  :list_models,
+  :load_model,
+  :load_models,
   :model_directory, 
   :model_directory=, 
   :tmp_directory,
   :tmp_directory=,
-  :get_note,
-  :load_model,
-  :list_models,
-  :edit_models
+  :update_model,
+  :write_model
   
