@@ -5,11 +5,11 @@
 
 Gem::Specification.new do |s|
   s.name = "gearbox"
-  s.version = "0.1.10"
+  s.version = "0.1.17"
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["David Richards"]
-  s.date = "2012-04-03"
+  s.date = "2012-04-05"
   s.description = "A SPARQL-driven modeling toolset for semantic models."
   s.email = "davidlamontrichards@gmail.com"
   s.executables = ["gearbox"]
@@ -34,6 +34,7 @@ Gem::Specification.new do |s|
     "lib/gearbox/attribute_collection.rb",
     "lib/gearbox/mixins/active_model_implementation.rb",
     "lib/gearbox/mixins/ad_hoc_properties.rb",
+    "lib/gearbox/mixins/queryable_implementation.rb",
     "lib/gearbox/mixins/resource.rb",
     "lib/gearbox/mixins/semantic_accessors.rb",
     "lib/gearbox/mixins/subject_methods.rb",
@@ -64,6 +65,7 @@ Gem::Specification.new do |s|
     "spec/gearbox/attribute_spec.rb",
     "spec/gearbox/mixins/active_model_implementation_spec.rb",
     "spec/gearbox/mixins/ad_hoc_properties_spec.rb",
+    "spec/gearbox/mixins/queryable_implementation_spec.rb",
     "spec/gearbox/mixins/resource_spec.rb",
     "spec/gearbox/mixins/semantic_accessors_spec.rb",
     "spec/gearbox/mixins/subject_methods_spec.rb",
