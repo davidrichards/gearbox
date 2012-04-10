@@ -4,6 +4,7 @@
 require 'linkeddata'
 require 'ostruct'
 require 'active_model'
+require 'open-uri'
 
 module Gearbox
   
@@ -107,6 +108,11 @@ module Gearbox
   end
   module_function :type_alias
   
+  # ==========
+  # = Errors =
+  # ==========
+  class NotImplemented < StandardError; end
+  
   # ========================
   # = Helper Utility: path =
   # ========================
@@ -122,39 +128,19 @@ module Gearbox
   # =======================
   require path('type')
   require path('types')
+  
   autoload :Attribute, path('attribute')
   autoload :AttributeCollection, path('attribute_collection')
   autoload :RDFCollection, path('rdf_collection')
+  autoload :Repository, path('repository')
 
   autoload :AdHocProperties, path('mixins/ad_hoc_properties')
   autoload :ActiveModelImplementation, path('mixins/active_model_implementation')
   autoload :AttributeMethods, path('mixins/attribute_methods')
+  autoload :DomainQueryBuilder, path('mixins/domain_query_builder')
   autoload :QueryableImplementation, path('mixins/queryable_implementation')
   autoload :Resource, path('mixins/resource')
   autoload :SemanticAccessors, path('mixins/semantic_accessors')
   autoload :SubjectMethods, path('mixins/subject_methods')
-  
-end
-
-module Example
-  # ========================
-  # = Helper Utility: path =
-  # ========================
-  # @private
-  def path(path)
-    File.expand_path("../examples/#{path}", __FILE__)
-  end
-  private :path
-  module_function :path
-
-  # ============
-  # = Examples =
-  # ============
-  
-  # Will separate these after things get to a solid 0.1 state.
-  autoload :Audience, path('audience')
-  autoload :Person, path('person')
-  autoload :Reference, path('reference')
-  autoload :Theme, path('theme')
   
 end

@@ -18,7 +18,8 @@ module Gearbox
       base.send :include, SubjectMethods
       base.send :include, SemanticAccessors
       base.send :include, QueryableImplementation
-      base.send :include, RDF::Mutable
+      base.send :include, DomainQueryBuilder
+      
     end
     
     def inspect

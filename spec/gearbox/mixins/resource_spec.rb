@@ -31,8 +31,8 @@ describe Resource do
     @class.included_modules.must_include Gearbox::ActiveModelImplementation
   end
   
-  it "uses RDF::Mutable" do
-    @class.included_modules.must_include RDF::Mutable
+  it "uses DomainQueryBuilder" do
+    @class.included_modules.must_include Gearbox::DomainQueryBuilder
   end
   
   describe "Load order" do
