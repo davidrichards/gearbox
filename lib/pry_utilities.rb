@@ -3,7 +3,183 @@
 require 'forwardable'
 require 'fileutils'
 
+require 'restclient'
+# The dependency on Nokogiri may go away, I'll be experimenting 
+# with content types before I commit to adding this permentantly
+require 'nokogiri'
+
 include Gearbox
+
+# These are temporary classes for helping me get better introspection 
+# on what should be available in Gearbox 1.0.  There are hard dependencies
+# here on having a local SPARQL end point that follows the 4Store conventions
+# and running on port 8000.
+class SPARQLResult
+  
+  # Get a result table from the query
+  def self.get_result(result_string)
+    result = new(result_string)
+    result.result_table
+  end
+  
+  SPARQL_NAMESPACE = {'sparql' => 'http://www.w3.org/2005/sparql-results#'} unless defined?(SPARQL_NAMESPACE)
+  attr_reader :result_string
+  
+  def initialize(result_string)
+    @result_string = result_string
+  end
+  
+  def ask?
+    not xml.xpath('//sparql:boolean', SPARQL_NAMESPACE).empty?
+  end
+  
+  def ask_value
+    return nil unless ask?
+    xml.xpath('//sparql:boolean', SPARQL_NAMESPACE).text == 'true'
+  end
+  
+  def results
+    return ask_value if ask?
+    @results = Hash.new {|h, k| h[k] = []}
+    xml.xpath('//sparql:result', SPARQL_NAMESPACE).each do |result|
+      result.xpath('./sparql:binding', SPARQL_NAMESPACE).each do |variable_binding|
+        name = variable_binding.attr('name')
+        value = extract_value(variable_binding)
+        @results[name] << value
+      end
+    end
+    @results
+  end
+  
+  def result_table
+    return ask_value if ask?
+    keys = head_node.xpath(".//sparql:variable/@name", SPARQL_NAMESPACE).map(&:value)
+    values = []
+    xml.xpath('//sparql:result', SPARQL_NAMESPACE).each do |result|
+      record = []
+      result.xpath('./sparql:binding', SPARQL_NAMESPACE).each do |variable_binding|
+        value = extract_value(variable_binding)
+        record << value
+      end
+      values << record
+    end
+    # puts keys.inspect
+    # values.each {|v| puts v.inspect}
+    values.unshift keys
+    values
+    
+    # Extracts one or more values from the Result Table
+    def values.extract(*targets)
+      array = self.dup
+      keys = array.shift
+      indices = targets.map {|key| keys.index(key.to_s)}
+      array.map {|e| e[*indices]}
+    end
+    values
+      
+  end
+  
+  def inspect
+    # "SPARQLResult: #{result_string[0..50].split(/\n/)[0]}"
+    "SPARQLResult: #{results.keys}"
+  end
+  
+  private
+  
+    def extract_value(variable_binding_node)
+      # Not Implemented: literals, sequences, indices, data types, languages
+      # Need to deal with bnode, uri, or literal.  Ignoring all of that for now...
+      variable_binding_node.text
+    end
+    
+    def head_node
+      @head_node ||= xml.xpath('//sparql:head', SPARQL_NAMESPACE)
+    end
+    
+    def variable_nodes
+      @variable_nodes ||= head_node.xpath('//sparql::variable', SPARQL_NAMESPACE)
+    end
+    
+    def xml
+      @xml ||= Nokogiri::XML(result_string)
+    end
+end
+
+class SPARQLEndpoint
+  
+  attr_reader :base_uri
+  
+  def initialize(uri="http://localhost:8000")
+    @base_uri = uri
+  end
+  
+  attr_writer :select_uri
+  def select_uri
+    @select_uri ||= File.join(base_uri, 'sparql/')
+  end
+  
+  attr_writer :update_uri
+  def update_uri
+    @update_uri ||= File.join(base_uri, 'data/')
+  end
+  
+  def query(sparql)
+    response = RestClient.post select_uri, :query => sparql
+    SPARQLResult.get_result(response)
+  end
+  
+  def queries
+    registered.keys
+  end
+  
+  def memoize_query(name, sparql=nil)
+    return memoized[name] if memoized[name]
+    register_query(name, sparql)
+    memoized[name] ||= query(sparql)
+  end
+  alias :memoize :memoize_query
+  
+  def register_query(name, sparql)
+    registered[name] = sparql
+    memoized[name] = nil
+
+    self.class.send(:define_method, name) do
+      memoized[name] ||= query(registered[name])
+    end
+    
+    self.class.send(:define_method, "#{name}!") do
+      memoized[name] = query(registered[name])
+    end
+    
+    true
+  end
+  alias :register :register_query
+
+  # Lookup some SPARQL
+  def query_for(name)
+    registered[name]
+  end
+  alias :sparql_for :query_for
+  
+  def registered
+    @registered ||= {}
+  end
+  
+  def memoized
+    @memoized ||= {}
+  end
+
+  def inspect
+    "SPARQLEndpoint: #{base_uri}"
+  end
+  
+end
+
+
+
+
+
+
 
 class Utilities
   # Great for writing ad hoc models.
@@ -72,6 +248,7 @@ class Utilities
   def get_note(opts={})
     type = opts.fetch(:type, 'md')
     contents = opts[:contents]
+    contents = opts[:content] if opts.has_key?(:content) and not contents
     begin
       filename = File.join(tmp_directory, "#{self.object_id}.#{type}")
       i = 0

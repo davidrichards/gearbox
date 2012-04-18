@@ -6,6 +6,8 @@ gem 'equivalent-xml'
 gem 'activemodel'
 gem "pry"
 gem "rest-client"
+# This may be a temporary dependency
+gem "nokogiri"
 
 if RUBY_PLATFORM =~ /darwin/i
   gem 'autotest-fsevent'
