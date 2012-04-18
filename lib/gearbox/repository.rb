@@ -22,31 +22,6 @@ module Gearbox
     #   raise NotImplemented, "delete_statement is not yet implemented in Gearbox::Adapter"
     # end
     
-    # def load(filename, options = {})
-    #   return super(filename, options) if /^https?:\/\//.match(filename)
-    # 
-    #   uri = nil
-    # 
-    #   if options[:context]
-    #     uri = @dataURI + options[:context]
-    #   else
-    #     uri = @dataURI + 'file://' + File.expand_path(filename)
-    #   end
-    # 
-    #   uri = URI.parse(uri)
-    #   content = open(filename).read
-    #   begin
-    #     req = Net::HTTP::Put.new(uri.path)
-    #     Net::HTTP.start(uri.host, uri.port) do |http|
-    #       http.request(req, content)
-    #     end
-    #   rescue Errno::ECONNREFUSED, Errno::ECONNRESET, TimeoutError
-    #     retry
-    #   end
-    # end
-
-    # alias_method :load!, :load
-    
     attr_writer :load_handler
     def load_handler
       @load_handler ||= lambda do |*args|

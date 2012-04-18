@@ -194,9 +194,15 @@ class SPARQLEndpoint
   def register_query(name, sparql)
     registered[name] = sparql
     memoized[name] = nil
+
     self.class.send(:define_method, name) do
       memoized[name] ||= query(registered[name])
     end
+    
+    self.class.send(:define_method, "#{name}!") do
+      memoized[name] = query(registered[name])
+    end
+    
     true
   end
   alias :register :register_query
@@ -332,4 +338,8 @@ class Person
       }
     END
   end
+end
+
+def endpoint
+  @endpoint ||= SPARQLEndpoint.new
 end

@@ -5,6 +5,7 @@ gem 'sparql'
 gem 'equivalent-xml'
 gem 'activemodel'
 gem "pry"
+gem "rest-client"
 
 if RUBY_PLATFORM =~ /darwin/i
   gem 'autotest-fsevent'
