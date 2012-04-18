@@ -2,6 +2,7 @@
 
 require 'forwardable'
 require 'fileutils'
+require 'yaml'
 
 require 'restclient'
 # The dependency on Nokogiri may go away, I'll be experimenting 
@@ -107,11 +108,34 @@ end
 
 class SPARQLEndpoint
   
-  attr_reader :base_uri
+  attr_reader :base_uri, :session
   
-  def initialize(uri="http://localhost:8000")
-    @base_uri = uri
+  def initialize(opts={})
+    @base_uri = opts.fetch(:uri, "http://localhost:8000")
+    @session = opts[:session]
   end
+  
+  def load_queries
+    return nil unless stored_queries_filename
+    query_hash = YAML.load_file(stored_queries_filename)
+    return nil unless query_hash.is_a?(Hash)
+    query_hash.each do |name, sparql|
+      register_query(name, sparql)
+    end
+  end
+  
+  def save_queries
+    return nil unless stored_queries_filename
+    File.open(stored_queries_filename, 'w') {|f| f.puts YAML.dump(registered)}
+  end
+  
+  def stored_queries_filename
+    return @stored_queries if @stored_queries
+    return nil unless session
+    return nil unless user_directory = session.user_directory
+    @stored_queries = File.join(user_directory, 'stored_queries.yml')
+  end
+  private :stored_queries_filename
   
   attr_writer :select_uri
   def select_uri
@@ -236,6 +260,11 @@ class Utilities
   end
   attr_writer :tmp_directory
   
+  def endpoint(opts={})
+    @endpoint = nil if opts[:reload]
+    @endpoint ||= SPARQLEndpoint.new({:session => self}.merge(opts))
+  end
+  
   require 'fileutils'
   # Great for writing descriptions without messing around with quotes and escapes and things
   # TODO: Make this work for several sessions. (Thread it?)
@@ -267,6 +296,7 @@ extend Forwardable
 def_delegators :@utilities, 
   :build_model, 
   :edit_models,
+  :endpoint,
   :get_note,
   :list_models,
   :load_model,
