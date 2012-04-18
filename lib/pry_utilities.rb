@@ -69,8 +69,9 @@ class Utilities
   require 'fileutils'
   # Great for writing descriptions without messing around with quotes and escapes and things
   # TODO: Make this work for several sessions. (Thread it?)
-  def get_note(type="md")
-    contents = nil
+  def get_note(opts={})
+    type = opts.fetch(:type, 'md')
+    contents = opts[:contents]
     begin
       filename = File.join(tmp_directory, "#{self.object_id}.#{type}")
       i = 0
@@ -79,6 +80,7 @@ class Utilities
         i += 1
       end
       raise "ENV['EDITOR'] not set" unless ENV['EDITOR']
+      File.open(filename, "w") {|f| f.puts contents}
       `#{ENV['EDITOR']} #{filename}`
       contents = File.read(filename)
     ensure
