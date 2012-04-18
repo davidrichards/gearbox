@@ -17,6 +17,7 @@ class Utilities
   end
   alias :update_model :write_model
   alias :build_model :write_model
+  alias :create_model :write_model
   
   def edit_models
     raise "Directory does not exist" unless File.exist?(model_directory)
