@@ -262,7 +262,7 @@ class Utilities
   
   def endpoint(opts={})
     @endpoint = nil if opts[:reload]
-    @endpoint ||= SPARQLEndpoint.new({:session => self}.merge(opts))
+    @endpoint ||= SPARQLEndpoint.new({:session => self}.merge(opts)).tap {|e| e.load_queries}
   end
   
   require 'fileutils'
