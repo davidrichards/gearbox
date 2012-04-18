@@ -175,12 +175,6 @@ class SPARQLEndpoint
   
 end
 
-
-
-
-
-
-
 class Utilities
   # Great for writing ad hoc models.
   # TODO: Make this work for several sessions. (Thread it?)
