@@ -127,6 +127,7 @@ class SPARQLEndpoint
   def save_queries
     return nil unless stored_queries_filename
     File.open(stored_queries_filename, 'w') {|f| f.puts YAML.dump(registered)}
+    true
   end
   
   def stored_queries_filename
