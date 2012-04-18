@@ -280,7 +280,7 @@ class Utilities
         i += 1
       end
       raise "ENV['EDITOR'] not set" unless ENV['EDITOR']
-      File.open(filename, "w") {|f| f.puts contents}
+      File.open(filename, "w") {|f| f.print contents}
       `#{ENV['EDITOR']} #{filename}`
       contents = File.read(filename)
     ensure
